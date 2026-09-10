@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Create Account | LTU{% endblock %}
+{% block content %}
+<div class="container narrow-page register-page">
+  <div class="registration-head"><span class="kicker">Student registration</span><h1>Create your portal account</h1><p>Use your university details. This account will keep all your complaints and updates together.</p></div>
+  <div class="form-card register-card"><form method="post" class="portal-form form-grid">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<div class="field-group {% if field.name == 'password1' or field.name == 'password2' %}wide-field{% endif %} {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span aria-hidden="true">*</span>{% endif %}</label>{{ field }}{% if field.help_text %}<small class="help-text collapsible-help">{{ field.help_text|safe }}</small>{% endif %}{% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>{% endfor %}<div class="wide-field form-actions register-actions"><button type="submit" class="btn btn-primary">Create account <span aria-hidden="true">→</span></button><p>Already registered? <a href="{% url 'login' %}">Log in</a></p></div></form></div>
+</div>
+{% endblock %}

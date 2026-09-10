@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ complaint.reference }} | LTU{% endblock %}
+{% block content %}
+<div class="container narrow-page detail-page">
+  <a class="back-link" href="{% url 'dashboard' %}"><span aria-hidden="true">←</span> Back to dashboard</a>
+  <article class="detail-card">
+    <header class="detail-header">
+      <div><span class="ref">{{ complaint.reference }}</span><h1>{{ complaint.title }}</h1><div class="meta"><span>{{ complaint.category }}</span><span>Submitted {{ complaint.created_at|date:"d M Y, H:i" }}</span>{% if user.is_staff %}<span>By {{ complaint.student.get_full_name|default:complaint.student.username }}</span>{% endif %}</div></div>
+      <span class="status status-{{ complaint.status|lower }}"><i></i>{{ complaint.get_status_display }}</span>
+    </header>
+    <div class="status-timeline" aria-label="Complaint progress">
+      <div class="timeline-step is-done"><span>✓</span><div><strong>Submitted</strong><small>{{ complaint.created_at|date:"d M" }}</small></div></div>
+      <div class="timeline-line {% if complaint.status != 'PENDING' %}is-done{% endif %}"></div>
+      <div class="timeline-step {% if complaint.status != 'PENDING' %}is-done{% endif %}"><span>{% if complaint.status != 'PENDING' %}✓{% else %}2{% endif %}</span><div><strong>In review</strong><small>{% if complaint.status == 'PENDING' %}Next step{% else %}Under review{% endif %}</small></div></div>
+      <div class="timeline-line {% if complaint.status == 'RESOLVED' %}is-done{% endif %}"></div>
+      <div class="timeline-step {% if complaint.status == 'RESOLVED' %}is-done{% endif %}"><span>{% if complaint.status == 'RESOLVED' %}✓{% else %}3{% endif %}</span><div><strong>Resolved</strong><small>{% if complaint.status == 'RESOLVED' %}Complete{% else %}Awaiting{% endif %}</small></div></div>
+    </div>
+    <section class="detail-section"><h2>Description</h2><div class="prose">{{ complaint.description|linebreaks }}</div></section>
+    {% if complaint.attachment %}<section class="attachment-box"><span class="attachment-icon" aria-hidden="true">⌕</span><div><strong>Supporting attachment</strong><small>Uploaded with this complaint</small></div><a href="{{ complaint.attachment.url }}" target="_blank" rel="noopener">View file <span aria-hidden="true">↗</span></a></section>{% endif %}
+    {% if complaint.admin_response %}<section class="response-box"><div class="response-head"><span>LTU</span><div><strong>University response</strong><small>Official update</small></div></div><div class="prose">{{ complaint.admin_response|linebreaks }}</div></section>{% endif %}
+    {% if user.is_staff and form %}
+      <section class="admin-update"><div class="section-title"><span class="kicker">Case management</span><h2>Update this complaint</h2></div><form method="post" class="portal-form">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<div class="field-group {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>{% endfor %}<button type="submit" class="btn btn-primary">Save update</button></form></section>
+    {% endif %}
+  </article>
+</div>
+{% endblock %}

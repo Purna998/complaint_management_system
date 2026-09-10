@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Student Grievance Portal | LTU{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span></span> Student support, made accountable</div>
+      <h1>Your concern deserves a <em>clear path forward.</em></h1>
+      <p class="hero-lead">Raise a university-related concern securely, receive a unique reference, and follow every update through to resolution.</p>
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="btn btn-primary">Open your dashboard <span aria-hidden="true">→</span></a>
+          {% if not user.is_staff %}<a href="{% url 'complaint_create' %}" class="btn btn-secondary">Submit a complaint</a>{% endif %}
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-primary">Get started <span aria-hidden="true">→</span></a>
+          <a href="{% url 'login' %}" class="btn btn-secondary">Track a complaint</a>
+        {% endif %}
+      </div>
+      <div class="trust-row">
+        <div><span class="trust-icon">01</span><span><strong>Confidential</strong><small>Secure student access</small></span></div>
+        <div><span class="trust-icon">02</span><span><strong>Trackable</strong><small>Live status updates</small></span></div>
+        <div><span class="trust-icon">03</span><span><strong>Accountable</strong><small>Documented responses</small></span></div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-label="Complaint resolution process">
+      <div class="seal-watermark"></div>
+      <div class="process-card">
+        <div class="process-head"><div><span class="live-dot"></span> Resolution pathway</div><span class="secure-label">Secure portal</span></div>
+        <ol class="process-list">
+          <li class="is-active"><span>1</span><div><strong>Tell us what happened</strong><small>Share the details and supporting file</small></div></li>
+          <li><span>2</span><div><strong>Receive your reference</strong><small>Use it to identify your case</small></div></li>
+          <li><span>3</span><div><strong>Follow the progress</strong><small>See review and response updates</small></div></li>
+        </ol>
+        <div class="process-note"><span aria-hidden="true">✓</span><p><strong>One place, full visibility.</strong><br>Every complaint stays connected to your account.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="how-section" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-heading"><div><span class="kicker">Simple by design</span><h2 id="how-title">From concern to resolution</h2></div><p>A focused process that keeps you informed without unnecessary office visits or uncertainty.</p></div>
+    <div class="feature-grid">
+      <article class="feature-card"><span class="feature-number">01</span><h3>Submit with context</h3><p>Select a category, explain your concern, and attach evidence when helpful.</p></article>
+      <article class="feature-card"><span class="feature-number">02</span><h3>Track in real time</h3><p>Your dashboard shows whether the complaint is pending, under review, or resolved.</p></article>
+      <article class="feature-card"><span class="feature-number">03</span><h3>Receive a response</h3><p>University staff can provide a clear, documented update directly on your case.</p></article>
+    </div>
+  </div>
+</section>
+{% endblock %}

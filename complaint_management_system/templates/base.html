@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#003b63">
+  <meta name="description" content="Lumbini Technological University complaint and grievance portal">
+  <title>{% block title %}LTU Grievance Portal{% endblock %}</title>
+  <link rel="icon" href="{% static 'img/ltu-seal.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="utility-bar">
+      <div class="container utility-inner">
+        <span>Lumbini Technological University</span>
+        <div class="utility-links">
+          <span>Nepalgunj-10, Banke</span>
+          <a href="https://ltu.edu.np" target="_blank" rel="noopener">University website <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="brand-bar">
+      <div class="container brand-inner">
+        <a class="brand" href="{% url 'home' %}" aria-label="LTU Grievance Portal home">
+          <img src="{% static 'img/ltu-seal.png' %}" alt="Lumbini Technological University seal" width="68" height="68">
+          <span class="brand-copy">
+            <span class="brand-nepali" lang="ne">लुम्बिनी प्राविधिक विश्वविद्यालय</span>
+            <span class="brand-name">Lumbini Technological University</span>
+            <span class="brand-product">Grievance &amp; Complaint Portal</span>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+          <span class="sr-only">Toggle navigation</span><span></span><span></span><span></span>
+        </button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+          <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}>Home</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" {% if 'dashboard' in request.resolver_match.url_name %}aria-current="page"{% endif %}>Dashboard</a>
+            {% if not user.is_staff %}<a class="nav-cta" href="{% url 'complaint_create' %}">Submit complaint</a>{% endif %}
+            <form class="logout-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log out</button></form>
+          {% else %}
+            <a href="{% url 'login' %}" {% if request.resolver_match.url_name == 'login' %}aria-current="page"{% endif %}>Log in</a>
+            <a class="nav-cta" href="{% url 'register' %}">Create account</a>
+          {% endif %}
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main id="main-content" class="site-main">
+    {% if messages %}
+      <div class="container message-stack" aria-live="polite">
+        {% for message in messages %}<div class="message {{ message.tags }}" role="status"><span class="message-icon" aria-hidden="true">{% if message.tags == 'error' %}!{% else %}✓{% endif %}</span><span>{{ message }}</span></div>{% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand"><img src="{% static 'img/ltu-seal.png' %}" alt="" width="46" height="46"><div><strong>Lumbini Technological University</strong><span>Transparent service. Accountable resolution.</span></div></div>
+      <div class="footer-contact"><span>Nepalgunj-10, Banke, Nepal</span><a href="mailto:info@ltu.edu.np">info@ltu.edu.np</a><span>© {% now "Y" %} LTU</span></div>
+    </div>
+  </footer>
+  <script src="{% static 'js/portal.js' %}" defer></script>
+</body>
+</html>

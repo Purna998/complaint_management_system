@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}My Complaints | LTU{% endblock %}
+{% block content %}
+<div class="container page-wrap">
+  <div class="page-heading split-heading"><div><span class="kicker">Student workspace</span><h1>My complaints</h1><p>View your submissions and follow their resolution status.</p></div><a href="{% url 'complaint_create' %}" class="btn btn-primary"><span aria-hidden="true">＋</span> New complaint</a></div>
+  <div class="dashboard-layout">
+    <aside class="side-nav" aria-label="Dashboard navigation">
+      <a href="{% url 'dashboard' %}" class="active"><span class="nav-icon" aria-hidden="true">▦</span><span>My complaints</span></a>
+      <a href="{% url 'complaint_create' %}"><span class="nav-icon" aria-hidden="true">＋</span><span>New complaint</span></a>
+      <div class="side-help"><strong>Need assistance?</strong><p>Include dates, locations, and supporting details for a faster review.</p></div>
+    </aside>
+    <section class="content-card" aria-label="Submitted complaints">
+      <div class="card-header"><div><h2>Your submissions</h2><p>{{ complaints|length }} complaint{{ complaints|length|pluralize }}</p></div></div>
+      {% if complaints %}<div class="complaint-list">
+        {% for c in complaints %}<article class="complaint-row"><div class="complaint-main"><span class="ref">{{ c.reference }}</span><a class="complaint-title" href="{% url 'complaint_detail' c.pk %}">{{ c.title }}</a><div class="meta"><span>{{ c.category }}</span><span>{{ c.created_at|date:"d M Y" }}</span></div></div><span class="status status-{{ c.status|lower }}"><i></i>{{ c.get_status_display }}</span><a class="row-action" href="{% url 'complaint_detail' c.pk %}" aria-label="View {{ c.title }}">View <span aria-hidden="true">→</span></a></article>{% endfor %}
+      </div>{% else %}<div class="empty-state"><div class="empty-icon">✦</div><h3>No complaints yet</h3><p>When something needs attention, start a submission here. You’ll be able to track every update.</p><a href="{% url 'complaint_create' %}" class="btn btn-primary">Submit your first complaint</a></div>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

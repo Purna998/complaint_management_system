@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Submit a Complaint | LTU{% endblock %}
+{% block content %}
+<div class="container narrow-page">
+  <a class="back-link" href="{% url 'dashboard' %}"><span aria-hidden="true">←</span> Back to dashboard</a>
+  <div class="form-layout">
+    <section class="form-card">
+      <div class="form-heading"><span class="kicker">New submission</span><h1>Submit a complaint</h1><p>Provide clear details so the right university team can review your concern efficiently.</p></div>
+      <form method="post" enctype="multipart/form-data" class="portal-form">
+        {% csrf_token %}{{ form.non_field_errors }}
+        {% for field in form %}
+          <div class="field-group {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span aria-hidden="true">*</span>{% endif %}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="help-text">{{ field.help_text|safe }}</small>{% endif %}
+            {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        {% endfor %}
+        <div class="form-actions"><button type="submit" class="btn btn-primary">Submit complaint <span aria-hidden="true">→</span></button><span>Fields marked * are required</span></div>
+      </form>
+    </section>
+    <aside class="form-guide">
+      <div class="guide-icon">i</div><h2>Before you submit</h2>
+      <ul><li>Use a short, specific title.</li><li>Include relevant dates, places, and people.</li><li>Avoid including passwords or sensitive financial details.</li><li>Attach supporting evidence when available.</li></ul>
+      <div class="privacy-note"><strong>Your submission is private</strong><p>Only you and authorized university staff can view the complaint.</p></div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

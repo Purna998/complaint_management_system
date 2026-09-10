@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Log In | LTU{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-panel auth-intro"><div class="auth-intro-inner"><span class="kicker light">Student support portal</span><h1>Welcome back.</h1><p>Sign in to track your concerns, review university responses, and stay informed.</p><div class="auth-quote"><span>“</span><p>A clear channel for every student voice.</p></div></div></div>
+  <div class="auth-panel auth-form-panel"><div class="auth-card"><div class="form-heading"><span class="kicker">Secure access</span><h2>Log in to your account</h2><p>Enter the credentials you used when registering.</p></div>
+    <form method="post" class="portal-form">{% csrf_token %}{{ form.non_field_errors }}<div class="field-group {% if form.username.errors %}has-error{% endif %}"><label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}{% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div><div class="field-group {% if form.password.errors %}has-error{% endif %}"><label for="{{ form.password.id_for_label }}">Password</label>{{ form.password }}{% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div><button type="submit" class="btn btn-primary btn-block">Log in <span aria-hidden="true">→</span></button></form>
+    <p class="auth-switch">New to the portal? <a href="{% url 'register' %}">Create a student account</a></p>
+  </div></div>
+</div>
+{% endblock %}
